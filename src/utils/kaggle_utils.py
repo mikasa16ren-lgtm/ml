@@ -24,10 +24,15 @@ def is_kaggle_env() -> bool:
 
 
 def list_kaggle_inputs() -> list[Path]:
-    """Top-level directories mounted under /kaggle/input, or [] if not on Kaggle."""
+    """Recursively list directories mounted under /kaggle/input."""
     if not KAGGLE_INPUT_ROOT.exists():
         return []
-    return [p for p in KAGGLE_INPUT_ROOT.iterdir() if p.is_dir()]
+
+    return [
+        p
+        for p in KAGGLE_INPUT_ROOT.rglob("*")
+        if p.is_dir()
+    ]
 
 
 def _matches_keywords(name: str, keywords: Iterable[str]) -> bool:
